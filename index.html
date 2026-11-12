@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabSentry AI - Clinical Laboratory Sample Pre-Check System</title>
+  
+  <!-- Tailwind CSS via CDN for rapid utility styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js for interactive analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Tesseract.js for browser-based client-side OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <!-- Custom Clinical Design System Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- ============================================================== -->
+  <!-- CLINICAL COMPLIANCE & EDUCATIONAL DISCLAIMER BANNER            -->
+  <!-- ============================================================== -->
+  <div class="bg-amber-500 text-slate-950 px-4 py-2 border-b border-amber-600 shadow-xs">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2 text-center sm:text-left font-medium">
+        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-950 text-amber-400 font-black text-2xs flex-shrink-0">!</span>
+        <span>
+          <strong>EDUCATIONAL PROTOTYPE:</strong> Synthetic demo data only. Must not diagnose patients or claim to prove that a specimen is clinically safe. Final decisions must remain with laboratory professionals.
+        </span>
+      </div>
+      <button data-open-disclaimer class="underline text-slate-950 hover:text-white font-bold whitespace-nowrap text-3xs uppercase tracking-wider">
+        Clinical Scope & Limits →
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TOP HEADER & BRANDING NAVIGATION                               -->
+  <!-- ============================================================== -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-teal-400 flex items-center justify-center text-white font-black text-xl shadow-md border border-sky-400/30">
+            LS
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-black tracking-tight text-white">LabSentry <span class="text-sky-400 font-extrabold">AI</span></h1>
+              <span class="text-3xs uppercase tracking-widest px-2 py-0.5 rounded-full bg-sky-950 text-sky-300 border border-sky-800 font-bold">LIMS Pre-Check v2.4</span>
+            </div>
+            <p class="text-xs text-slate-400 hidden sm:block">Intelligent Pre-Analytical Specimen Verification & Quality Control</p>
+          </div>
+        </div>
+
+        <!-- Quick Status & Actions -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button id="btnResetDemoData" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white border border-slate-700 transition flex items-center gap-1.5" title="Restore default synthetic laboratory records">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span class="hidden md:inline">Reset Demo Data</span>
+            <span class="md:hidden">Reset</span>
+          </button>
+
+          <button id="btnNewPreCheck" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 shadow-sm transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>New Pre-Check</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs Bar -->
+    <div class="bg-slate-950 border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto flex items-center space-x-1 sm:space-x-2 py-1.5 overflow-x-auto text-xs">
+        <button data-nav-target="precheck" class="nav-link px-3.5 py-1.5 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🧪</span> New Pre-Check Form
+        </button>
+        <button data-nav-target="dashboard" class="nav-link px-3.5 py-1.5 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>📊</span> Dashboard & Statistics
+        </button>
+        <button data-nav-target="history" class="nav-link px-3.5 py-1.5 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>📋</span> Sample History Log
+        </button>
+        <button data-nav-target="rules" class="nav-link px-3.5 py-1.5 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>📖</span> Tube & Volume Rules
+        </button>
+        <button data-nav-target="studio" class="nav-link px-3.5 py-1.5 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🏷️</span> Synthetic Label Studio
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- MAIN APPLICATION CONTENT AREA                                  -->
+  <!-- ============================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+    <!-- ============================================================ -->
+    <!-- VIEW 1: NEW SAMPLE PRE-CHECK (PRIMARY WORKBENCH)             -->
+    <!-- ============================================================ -->
+    <section id="view-precheck" class="view-panel space-y-6">
+      
+      <!-- Preset Quick Selection Bar -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">Interactive Test Scenarios</span>
+              <span class="text-xs text-slate-500">Click any preset to test clinical validation rules:</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="selectPresetCase" class="text-xs font-medium text-slate-600 hidden sm:inline">Quick Scenario:</label>
+            <select id="selectPresetCase" class="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-slate-50 focus:bg-white text-slate-800">
+              <option value="preset-clean-cbc">Clean Pass: Complete Blood Count (85% EDTA)</option>
+              <option value="preset-tube-mismatch">Mismatch: Wrong Tube Additive (PT/INR in EDTA)</option>
+              <option value="preset-critical-underfill">Mismatch: Critical Citrate Underfill (58%)</option>
+              <option value="preset-sample-id-mismatch">Mismatch: Barcode Specimen ID Mix-Up</option>
+              <option value="preset-suboptimal-volume">Review: Sub-Optimal Serum Volume (42%)</option>
+              <option value="preset-stat-troponin">Clean Pass: STAT Troponin (Green Heparin)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Quick preset pill buttons -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mt-3 pt-3 border-t border-slate-100">
+          <button data-load-preset="preset-clean-cbc" class="text-left p-2 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition">
+            <span class="block text-2xs font-black text-emerald-800">✓ CLEAN PASS</span>
+            <span class="block text-xs font-semibold text-slate-800 truncate">CBC in Lavender EDTA</span>
+          </button>
+          <button data-load-preset="preset-tube-mismatch" class="text-left p-2 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 transition">
+            <span class="block text-2xs font-black text-rose-800">✕ TUBE MISMATCH</span>
+            <span class="block text-xs font-semibold text-slate-800 truncate">PT/INR in EDTA Tube</span>
+          </button>
+          <button data-load-preset="preset-critical-underfill" class="text-left p-2 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 transition">
+            <span class="block text-2xs font-black text-rose-800">✕ CRITICAL UNDERFILL</span>
+            <span class="block text-xs font-semibold text-slate-800 truncate">Citrate at 58% (&lt;90%)</span>
+          </button>
+          <button data-load-preset="preset-sample-id-mismatch" class="text-left p-2 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 transition">
+            <span class="block text-2xs font-black text-rose-800">✕ ID MISMATCH</span>
+            <span class="block text-xs font-semibold text-slate-800 truncate">Barcode reads 9999</span>
+          </button>
+          <button data-load-preset="preset-suboptimal-volume" class="text-left p-2 rounded-lg border border-amber-200 bg-amber-50 hover:bg-amber-100 transition">
+            <span class="block text-2xs font-black text-amber-800">⚠ REVIEW REQ</span>
+            <span class="block text-xs font-semibold text-slate-800 truncate">SST Tube at 42% Fill</span>
+          </button>
+          <button data-load-preset="preset-stat-troponin" class="text-left p-2 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition">
+            <span class="block text-2xs font-black text-emerald-800">✓ CLEAN STAT</span>
+            <span class="block text-xs font-semibold text-slate-800 truncate">Troponin in Heparin</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Two-Column Workbench Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT COLUMN: Requisition Intake & Volume Configuration (Form - Feature 2) -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">1. Laboratory Requisition & Specimen Intake</h3>
+                <p class="text-xs text-slate-500">Enter order details or auto-populate via OCR scanning on the right</p>
+              </div>
+              <button id="btnClearForm" class="text-xs text-slate-400 hover:text-slate-600 transition">Clear Form</button>
+            </div>
+
+            <form id="preCheckForm" class="space-y-4">
+              <!-- Order ID and Sample ID Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="inputOrderId" class="block text-xs font-bold text-slate-700 mb-1">
+                    Order ID / Accession # <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="text" id="inputOrderId" required placeholder="e.g. ORD-9021" 
+                    class="w-full text-xs font-mono font-semibold px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none">
+                </div>
+
+                <div>
+                  <label for="inputSampleId" class="block text-xs font-bold text-slate-700 mb-1">
+                    Sample / Specimen ID <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="text" id="inputSampleId" required placeholder="e.g. SMP-2024-8801" 
+                    class="w-full text-xs font-mono font-semibold px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none">
+                </div>
+              </div>
+
+              <!-- Patient Demographics Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="inputPatientName" class="block text-xs font-bold text-slate-700 mb-1">
+                    Patient Full Name
+                  </label>
+                  <input type="text" id="inputPatientName" placeholder="e.g. Eleanor Vance" 
+                    class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-sky-500 outline-none">
+                </div>
+
+                <div>
+                  <label for="inputPatientDob" class="block text-xs font-bold text-slate-700 mb-1">
+                    Date of Birth
+                  </label>
+                  <input type="date" id="inputPatientDob" 
+                    class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-sky-500 outline-none">
+                </div>
+              </div>
+
+              <!-- Test Name Selection -->
+              <div>
+                <label for="inputTestCode" class="block text-xs font-bold text-slate-700 mb-1">
+                  Ordered Laboratory Assay / Test <span class="text-rose-500">*</span>
+                </label>
+                <select id="inputTestCode" required class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-sky-500 outline-none">
+                  <!-- Dynamic test list -->
+                </select>
+              </div>
+
+              <!-- Tube Type Comparison Rows: Expected vs Collected -->
+              <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-3">
+                <!-- Expected Tube Type -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="inputExpectedTube" class="text-xs font-bold text-slate-700">
+                      Expected Tube Type (Per Clinical Protocol) <span class="text-rose-500">*</span>
+                    </label>
+                    <div id="expectedTubePreview"></div>
+                  </div>
+                  <select id="inputExpectedTube" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:border-sky-500 outline-none">
+                    <!-- Dynamic tube types -->
+                  </select>
+                </div>
+
+                <!-- Collected Tube Type -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="inputCollectedTube" class="text-xs font-bold text-slate-700">
+                      Collected Tube Type (Physical Specimen Received) <span class="text-rose-500">*</span>
+                    </label>
+                    <div id="collectedTubePreview"></div>
+                  </div>
+                  <select id="inputCollectedTube" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:border-sky-500 outline-none">
+                    <!-- Dynamic tube types -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Sample Volume Percentage with Visual Tube Graphic -->
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <label for="inputVolumePercent" class="text-xs font-bold text-slate-800">
+                        Specimen Fill Volume: <span id="volumeDisplayValue" class="text-sky-700 font-extrabold text-sm font-mono">75%</span>
+                      </label>
+                      <span id="volumeFeedbackBadge" class="text-xs px-2 py-0.5 rounded font-semibold bg-emerald-100 text-emerald-800">
+                        Adequate Volume
+                      </span>
+                    </div>
+
+                    <input type="range" id="inputVolumePercent" min="5" max="100" step="1" value="75" class="w-full cursor-pointer">
+
+                    <!-- Tick markers -->
+                    <div class="flex justify-between text-3xs font-mono text-slate-400 px-1">
+                      <span>0%</span>
+                      <span>40% (SST Min)</span>
+                      <span>50% (EDTA Min)</span>
+                      <span class="text-sky-600 font-bold">90% (Citrate Min)</span>
+                      <span>100%</span>
+                    </div>
+
+                    <p class="text-2xs text-slate-500 leading-normal">
+                      *Note: Sodium Citrate (Light Blue) requires strict &ge;90% fill for accurate 9:1 blood-to-anticoagulant ratio.
+                    </p>
+                  </div>
+
+                  <!-- Specimen Vial Graphic -->
+                  <div class="vial-container flex-shrink-0">
+                    <div id="vialCap" class="vial-cap"></div>
+                    <div class="vial-rubber-ring"></div>
+                    <div class="vial-glass-body">
+                      <div id="vialLiquidFill" class="vial-liquid">
+                        <div class="vial-meniscus"></div>
+                      </div>
+                      <div class="vial-ticks">
+                        <div class="vial-tick-major"></div>
+                        <div class="vial-tick"></div>
+                        <div class="vial-tick-major"></div>
+                        <div class="vial-tick"></div>
+                        <div class="vial-tick-major"></div>
+                        <div class="vial-tick"></div>
+                        <div class="vial-tick-major"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Primary Validation Trigger Action -->
+              <div class="pt-2">
+                <button type="button" id="btnRunValidation" class="w-full py-3.5 px-4 bg-gradient-to-r from-sky-600 to-teal-600 hover:from-sky-500 hover:to-teal-500 text-white font-extrabold text-sm rounded-xl shadow-md transition transform active:scale-[0.99] flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>RUN LABSENTRY PRE-CHECK VALIDATION</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Sample Label OCR Scanner & Review Panel (Features 3 & 4) -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">2. Vial Label Scanner & OCR Engine</h3>
+                <p class="text-xs text-slate-500">Scan physical label via Tesseract.js client OCR or choose a test preset</p>
+              </div>
+              <span class="text-3xs font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600">Client OCR</span>
+            </div>
+
+            <!-- Upload Drop Zone (Feature 3) -->
+            <div id="ocrDropZone" class="dropzone p-5 text-center relative group">
+              <input type="file" id="inputLabelFile" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+              <div class="flex flex-col items-center justify-center space-y-2 pointer-events-none">
+                <div class="w-12 h-12 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-110 transition">
+                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-sky-700 block">Click to upload specimen label or drag & drop</span>
+                  <span class="text-3xs text-slate-400">Supports PNG, JPG, WEBP • Processed directly in-browser</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Label Preview Canvas (Visual representation of scanned label) -->
+            <div id="ocrLabelPreviewContainer" class="hidden rounded-lg overflow-hidden border border-slate-200 bg-slate-100 p-2">
+              <div class="flex items-center justify-between text-2xs text-slate-500 mb-1 px-1">
+                <span class="font-bold">Scanned Vial Label Image</span>
+                <span id="ocrConfidenceScore" class="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  98% Match Confidence
+                </span>
+              </div>
+              <div class="flex justify-center bg-white rounded border border-slate-200 overflow-hidden">
+                <canvas id="ocrLabelCanvas" class="max-w-full h-auto object-contain max-h-[180px]"></canvas>
+              </div>
+            </div>
+
+            <!-- OCR Progress Bar Indicator -->
+            <div id="ocrProgressBarContainer" class="hidden space-y-1.5 p-3 rounded-lg bg-sky-50 border border-sky-100">
+              <div class="flex items-center justify-between text-xs text-sky-900 font-semibold">
+                <span id="ocrProgressStatusText">Analyzing barcode and label typography...</span>
+              </div>
+              <div class="w-full bg-sky-200 h-2 rounded-full overflow-hidden">
+                <div id="ocrProgressBar" class="bg-sky-600 h-2 rounded-full transition-all duration-200" style="width: 30%"></div>
+              </div>
+            </div>
+
+            <!-- OCR Review & Manual Correction Drawer (Feature 4) -->
+            <div id="ocrReviewPanel" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Review & Correct Extracted Text</h4>
+                  <p class="text-3xs text-slate-500">Edit any misread fields before applying to the requisition form</p>
+                </div>
+                <span id="ocrManualEditBadge" class="hidden text-3xs font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
+                  Technician Edited
+                </span>
+              </div>
+
+              <!-- Editable OCR parsed fields -->
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label class="block text-3xs font-bold text-slate-600 mb-0.5">Extracted Order ID:</label>
+                  <input type="text" id="reviewOrderId" class="w-full text-xs font-mono px-2.5 py-1.5 bg-white border border-slate-300 rounded focus:border-sky-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-3xs font-bold text-slate-600 mb-0.5">Extracted Sample ID:</label>
+                  <input type="text" id="reviewSampleId" class="w-full text-xs font-mono px-2.5 py-1.5 bg-white border border-slate-300 rounded focus:border-sky-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-3xs font-bold text-slate-600 mb-0.5">Detected Tube Keyword:</label>
+                  <input type="text" id="reviewTube" class="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-300 rounded focus:border-sky-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-3xs font-bold text-slate-600 mb-0.5">Extracted Patient Name:</label>
+                  <input type="text" id="reviewPatient" class="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-300 rounded focus:border-sky-500 outline-none">
+                </div>
+              </div>
+
+              <!-- Collapsible Raw OCR Transcript -->
+              <div>
+                <label class="block text-3xs font-bold text-slate-500 mb-0.5">Raw Optical OCR Text Stream:</label>
+                <textarea id="reviewRawText" rows="2" class="w-full text-3xs font-mono p-2 bg-white border border-slate-200 rounded text-slate-600"></textarea>
+              </div>
+
+              <!-- Apply to Form Button -->
+              <button type="button" id="btnApplyExtractedText" class="w-full py-2 px-3 bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs rounded-lg transition flex items-center justify-center gap-1.5 shadow-xs">
+                <span>Accept & Apply Extracted Data to Form</span>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- VALIDATION RESULTS & CLINICAL REASONS CARD (Features 6 & 7)   -->
+      <!-- ============================================================ -->
+      <div id="resultsContainer" class="hidden space-y-4">
+        <!-- Result Outcome Header Banner -->
+        <div id="resultHeaderBanner" class="p-5 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 bg-emerald-50 border-emerald-200">
+          <!-- Dynamic banner rendered in app.js -->
+        </div>
+
+        <!-- Detailed Reason-by-Reason Breakdown -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider">Clinical Verification Rules Checklist</h3>
+              <p class="text-xs text-slate-500">Explicit status and regulatory rationale for each pre-analytical rule</p>
+            </div>
+            <span class="text-xs font-mono text-slate-400">CLSI GP41 / ISO 15189 Standards</span>
+          </div>
+
+          <!-- Dynamic list of reasons populated by app.js -->
+          <div id="resultReasonsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Reason cards rendered by app.js -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- VIEW 2: DASHBOARD & ANALYTICS (Features 1 & 9)                -->
+    <!-- ============================================================ -->
+    <section id="view-dashboard" class="view-panel hidden space-y-6">
+      
+      <!-- Top Metric KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Total Checks -->
+        <div class="clinical-card p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pre-Checks</span>
+            <span class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-sm">🧪</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span id="kpiTotalChecks" class="text-3xl font-black text-slate-900 font-mono">12</span>
+            <span class="text-xs text-slate-400">specimens</span>
+          </div>
+          <p class="text-3xs text-slate-500 mt-1">Processed through intake ledger</p>
+        </div>
+
+        <!-- Card 2: Clean Passes -->
+        <div class="clinical-card p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">No Mismatch Found</span>
+            <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">✓</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span id="kpiNoMismatch" class="text-3xl font-black text-emerald-700 font-mono">7</span>
+            <span class="text-xs text-emerald-600 font-bold" id="kpiNoMismatchRate">58% Clean Pass</span>
+          </div>
+          <p class="text-3xs text-slate-500 mt-1">Cleared for direct analysis</p>
+        </div>
+
+        <!-- Card 3: Review Required -->
+        <div class="clinical-card p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Review Required</span>
+            <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">⚠</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span id="kpiReviewRequired" class="text-3xl font-black text-amber-700 font-mono">2</span>
+            <span class="text-xs text-amber-600 font-bold" id="kpiReviewRequiredRate">17% of intake</span>
+          </div>
+          <p class="text-3xs text-slate-500 mt-1">Marginal volume or OCR flag</p>
+        </div>
+
+        <!-- Card 4: Mismatch Detected -->
+        <div class="clinical-card p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-600">Mismatch Detected</span>
+            <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-sm">✕</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span id="kpiMismatchDetected" class="text-3xl font-black text-rose-700 font-mono">3</span>
+            <span class="text-xs text-rose-600 font-bold" id="kpiMismatchRate">25% Discrepancy</span>
+          </div>
+          <p class="text-3xs text-slate-500 mt-1">Rejected: wrong tube or underfill</p>
+        </div>
+      </div>
+
+      <!-- Secondary KPI Band: Volume Compliance & Risk -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-gradient-to-r from-sky-900 to-slate-900 text-white p-5 rounded-xl flex items-center justify-between">
+          <div>
+            <span class="text-xs text-sky-300 font-bold uppercase tracking-wider">Volume Rule Compliance</span>
+            <div class="text-2xl font-black mt-1" id="kpiVolumeCompliance">83%</div>
+            <p class="text-3xs text-slate-400 mt-0.5" id="kpiAvgVolume">Avg: 76% Fill</p>
+          </div>
+          <div class="w-12 h-12 rounded-full border-4 border-sky-400 flex items-center justify-center text-xs font-bold text-sky-200">
+            QC
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Pre-Analytical Risk Mitigated</span>
+            <div class="text-2xl font-black text-emerald-600 mt-1">100%</div>
+            <p class="text-3xs text-slate-400 mt-0.5">Discrepancies intercepted before analyzer intake</p>
+          </div>
+          <span class="text-2xl">🛡️</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Average Inspection Speed</span>
+            <div class="text-2xl font-black text-slate-800 mt-1">1.8s</div>
+            <p class="text-3xs text-slate-400 mt-0.5">Automated Optical + Rule Evaluation</p>
+          </div>
+          <span class="text-2xl">⚡</span>
+        </div>
+      </div>
+
+      <!-- Dashboard Charts Grid (Feature 9) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Chart 1: Outcome Distribution Doughnut -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Pre-Check Verification Outcomes</h4>
+            <span class="text-3xs text-slate-400">Doughnut Distribution</span>
+          </div>
+          <div class="relative h-[250px] w-full">
+            <canvas id="chartOutcomeDoughnut"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Discrepancy Breakdown by Category -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Discrepancy Root Causes</h4>
+            <span class="text-3xs text-slate-400">Horizontal Frequency</span>
+          </div>
+          <div class="relative h-[250px] w-full">
+            <canvas id="chartDiscrepancyBar"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Department Pre-Check Throughput -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Throughput by Laboratory Department</h4>
+            <span class="text-3xs text-slate-400">Volume Breakdown</span>
+          </div>
+          <div class="relative h-[240px] w-full">
+            <canvas id="chartDepartmentBar"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Tube Types Distribution -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Tube Additive / Cap Color Distribution</h4>
+            <span class="text-3xs text-slate-400">Intake Mix</span>
+          </div>
+          <div class="relative h-[240px] w-full">
+            <canvas id="chartTubeDistribution"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recent High-Priority Flagged Alerts Panel -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+          <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Recent High-Priority Interceptions (Audit Trail)</h4>
+          <span class="text-3xs text-slate-500">Requires Laboratory Technologist Signature</span>
+        </div>
+        <div id="dashboardRecentAlerts" class="divide-y divide-slate-100">
+          <!-- Recent alerts rendered by app.js -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- VIEW 3: SAMPLE HISTORY & LEDGER (Feature 8)                   -->
+    <!-- ============================================================ -->
+    <section id="view-history" class="view-panel hidden space-y-4">
+      
+      <!-- Search, Filters, and Export Bar -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <!-- Search box -->
+          <div class="relative flex-1 max-w-md">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              🔍
+            </span>
+            <input type="text" id="inputHistorySearch" placeholder="Search by Sample ID, Order ID, Patient, or Test..." 
+              class="w-full text-xs pl-8 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:border-sky-500 outline-none">
+          </div>
+
+          <!-- Export and Action Buttons -->
+          <div class="flex items-center gap-2">
+            <button id="btnExportCsv" class="px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
+              <span>📥 Export CSV</span>
+            </button>
+            <button id="btnExportJson" class="px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
+              <span>📄 Export JSON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Dropdowns Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-100 text-xs">
+          <div>
+            <label for="filterHistoryStatus" class="block text-3xs font-bold text-slate-500 mb-1">Status Filter:</label>
+            <select id="filterHistoryStatus" class="w-full text-xs px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg">
+              <option value="">All Verification Outcomes</option>
+              <option value="NO_MISMATCH">No Mismatch Found (Clean Pass)</option>
+              <option value="REVIEW_REQUIRED">Review Required</option>
+              <option value="MISMATCH_DETECTED">Mismatch Detected</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="filterHistoryTest" class="block text-3xs font-bold text-slate-500 mb-1">Laboratory Assay:</label>
+            <select id="filterHistoryTest" class="w-full text-xs px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+
+          <div>
+            <label for="filterHistorySort" class="block text-3xs font-bold text-slate-500 mb-1">Sort By:</label>
+            <select id="filterHistorySort" class="w-full text-xs px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg">
+              <option value="newest">Timestamp (Newest First)</option>
+              <option value="oldest">Timestamp (Oldest First)</option>
+              <option value="volume_desc">Volume % (High to Low)</option>
+              <option value="volume_asc">Volume % (Low to High)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
+          <span id="historyRecordsCount" class="font-bold text-slate-700">Showing records</span>
+          <span class="text-3xs text-slate-400">Chain of Custody LIMS Log</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-600 uppercase text-3xs font-bold tracking-wider border-b border-slate-200">
+                <th class="px-4 py-3">Time</th>
+                <th class="px-4 py-3">Sample & Order ID</th>
+                <th class="px-4 py-3">Patient & Test</th>
+                <th class="px-4 py-3">Tube Type</th>
+                <th class="px-4 py-3">Volume</th>
+                <th class="px-4 py-3">Pre-Check Result</th>
+                <th class="px-4 py-3">Primary Reason</th>
+                <th class="px-4 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- VIEW 4: TUBE & VOLUME RULES REFERENCE GUIDE                  -->
+    <!-- ============================================================ -->
+    <section id="view-rules" class="view-panel hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs">
+        <div class="max-w-3xl">
+          <h3 class="text-lg font-black text-slate-900">Clinical Specimen Tube Specifications & Volume Thresholds</h3>
+          <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+            Standard laboratory pre-analytical requirements based on Clinical and Laboratory Standards Institute (CLSI) standards. Understanding tube additives, blood-to-anticoagulant ratios, and minimum volume constraints is critical to preventing spurious analytical errors.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tubes Grid Reference -->
+      <div id="rulesGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered by app.js from LAB_TUBES -->
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- VIEW 5: SYNTHETIC LABEL STUDIO                               -->
+    <!-- ============================================================ -->
+    <section id="view-studio" class="view-panel hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs">
+        <div class="max-w-3xl">
+          <h3 class="text-lg font-black text-slate-900">Synthetic Vial Label Studio & Generator</h3>
+          <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+            Generate high-fidelity synthetic laboratory accession barcode labels for training, evaluation, and OCR stress-testing. You can select clinical test scenarios, modify any field, download the rendered PNG label, or send it directly into the OCR pre-check scanner.
+          </p>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center gap-3">
+          <label for="studioPresetSelect" class="text-xs font-bold text-slate-700">Preset Scenario:</label>
+          <select id="studioPresetSelect" class="text-xs px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg flex-1 max-w-md">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Generator Form -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+          <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Label Parameters</h4>
+
+          <div>
+            <label for="studioOrderId" class="block text-3xs font-bold text-slate-600 mb-0.5">Order Requisition ID:</label>
+            <input type="text" id="studioOrderId" value="ORD-9021" class="w-full text-xs font-mono px-3 py-1.5 bg-slate-50 border border-slate-300 rounded focus:bg-white outline-none">
+          </div>
+
+          <div>
+            <label for="studioSampleId" class="block text-3xs font-bold text-slate-600 mb-0.5">Specimen Barcode ID:</label>
+            <input type="text" id="studioSampleId" value="SMP-2024-8801" class="w-full text-xs font-mono px-3 py-1.5 bg-slate-50 border border-slate-300 rounded focus:bg-white outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="studioPatient" class="block text-3xs font-bold text-slate-600 mb-0.5">Patient Name:</label>
+              <input type="text" id="studioPatient" value="Eleanor Vance" class="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-300 rounded focus:bg-white outline-none">
+            </div>
+            <div>
+              <label for="studioDob" class="block text-3xs font-bold text-slate-600 mb-0.5">DOB:</label>
+              <input type="text" id="studioDob" value="1984-06-14" class="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-300 rounded focus:bg-white outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label for="studioTest" class="block text-3xs font-bold text-slate-600 mb-0.5">Test Ordered Label Text:</label>
+            <input type="text" id="studioTest" value="Complete Blood Count (CBC)" class="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-300 rounded focus:bg-white outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="studioTube" class="block text-3xs font-bold text-slate-600 mb-0.5">Tube Color Stripe:</label>
+              <select id="studioTube" class="w-full text-xs px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded">
+                <option value="LAVENDER_EDTA">Lavender EDTA</option>
+                <option value="LIGHT_BLUE_CITRATE">Light Blue Citrate</option>
+                <option value="GOLD_SST">Gold SST</option>
+                <option value="GREEN_HEPARIN">Green Heparin</option>
+                <option value="GRAY_FLUORIDE">Gray Fluoride</option>
+                <option value="ROYAL_BLUE">Royal Blue Trace</option>
+              </select>
+            </div>
+            <div>
+              <label for="studioVolume" class="block text-3xs font-bold text-slate-600 mb-0.5">Volume Display %:</label>
+              <input type="number" id="studioVolume" value="85" min="5" max="100" class="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-300 rounded">
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center gap-2">
+            <button id="btnStudioRender" class="flex-1 py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-lg transition">
+              Update Label
+            </button>
+            <button id="btnStudioDownload" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-lg border border-slate-300 transition">
+              💾 Download PNG
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas Output Display -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h4 class="text-xs font-black uppercase tracking-wider text-slate-800">Generated Specimen Barcode Label Preview</h4>
+              <span class="text-3xs font-mono text-slate-400">600 x 320 px High-Res</span>
+            </div>
+            <div class="p-4 bg-slate-100 rounded-lg flex items-center justify-center mt-3 border border-slate-200 overflow-hidden">
+              <canvas id="studioCanvas" class="max-w-full h-auto rounded shadow-sm border border-slate-300 bg-white"></canvas>
+            </div>
+          </div>
+
+          <button id="btnStudioSendToOcr" class="w-full py-3 px-4 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>SEND THIS LABEL DIRECTLY TO PRE-CHECK OCR SCANNER</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- FOOTER & REGULATORY DISCLAIMER (Persistent)                    -->
+  <!-- ============================================================== -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 text-xs py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-sky-600 text-white font-black text-xs flex items-center justify-center">LS</div>
+          <span class="text-slate-200 font-bold">LabSentry AI Specimen Pre-Check</span>
+          <span class="text-slate-500 text-3xs">• Educational Demonstration Prototype</span>
+        </div>
+        <div class="flex items-center gap-4 text-3xs text-slate-400">
+          <button data-open-disclaimer class="hover:text-slate-200 transition underline">Regulatory Disclaimer</button>
+          <span>•</span>
+          <span>Tesseract.js OCR v5</span>
+          <span>•</span>
+          <span>Chart.js v4</span>
+          <span>•</span>
+          <span>LocalStorage Client Engine</span>
+        </div>
+      </div>
+      <p class="text-3xs text-slate-500 text-center md:text-left leading-relaxed">
+        <strong>Mandatory Clinical Notice:</strong> This software is an educational prototype running entirely on synthetic demonstration data. It does not diagnose patients, perform clinical analysis, or certify specimen safety for diagnostic medical decisions. All final laboratory decisions must remain with certified clinical laboratory scientists and medical directors.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: SAMPLE AUDIT DETAILS (Features 6, 7 & 8)                -->
+  <!-- ============================================================== -->
+  <div id="modalSampleDetail" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-6 space-y-4">
+      <div class="flex items-start justify-between pb-3 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200" id="modalDetailSampleId">SMP-2024-8801</span>
+            <span class="text-xs text-slate-400">Order: <strong id="modalDetailOrderId" class="font-mono text-slate-700">ORD-9021</strong></span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mt-1" id="modalDetailTest">Complete Blood Count (CBC)</h3>
+        </div>
+        <button data-close-modal="modalSampleDetail" class="text-slate-400 hover:text-slate-700 text-lg font-bold p-1">✕</button>
+      </div>
+
+      <!-- Status Banner -->
+      <div id="modalDetailStatusBox">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <!-- Metadata Grid -->
+      <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <div>
+          <span class="text-slate-400 block text-3xs font-bold">PATIENT &amp; DOB</span>
+          <span id="modalDetailPatient" class="font-semibold text-slate-800">Eleanor Vance</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-3xs font-bold">INTAKE TIMESTAMP</span>
+          <span id="modalDetailTimestamp" class="font-semibold text-slate-800">2026-11-12</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-3xs font-bold">EXPECTED TUBE TYPE</span>
+          <span id="modalDetailExpectedTube" class="font-semibold text-slate-800">Lavender EDTA</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-3xs font-bold">COLLECTED TUBE TYPE</span>
+          <span id="modalDetailCollectedTube" class="font-semibold text-slate-800">Lavender EDTA</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-3xs font-bold">SAMPLE VOLUME %</span>
+          <span id="modalDetailVolume" class="font-semibold text-slate-800">85%</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-3xs font-bold">PHLEBOTOMIST / SOURCE</span>
+          <span id="modalDetailPhleb" class="font-semibold text-slate-800">PHL-402</span>
+        </div>
+      </div>
+
+      <!-- Audit Reasons Checklist -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-black uppercase tracking-wider text-slate-700">Inspection Rules Verification Log</h4>
+        <div id="modalDetailReasons" class="space-y-2">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+
+      <!-- Raw OCR Transcript -->
+      <div class="pt-2 border-t border-slate-100">
+        <span class="text-3xs font-bold text-slate-400 block mb-1">OPTICAL OCR RAW TRANSCRIPT</span>
+        <pre id="modalDetailOcrRaw" class="text-3xs font-mono p-2.5 rounded bg-slate-900 text-slate-200 max-h-24 overflow-y-auto whitespace-pre-wrap"></pre>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+        <button onclick="window.print()" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition">
+          🖨️ Print Specimen Slip
+        </button>
+        <button data-close-modal="modalSampleDetail" class="text-xs px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg transition">
+          Close Audit Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: RESET DEMO DATA CONFIRMATION (Feature 10)               -->
+  <!-- ============================================================== -->
+  <div id="modalResetConfirm" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 p-6 space-y-4">
+      <div class="flex items-center gap-3 text-amber-600">
+        <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-xl font-bold">
+          ⚠️
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Reset Demo Laboratory Records?</h3>
+          <p class="text-xs text-slate-500">Restore baseline synthetic specimen cases</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        This action will reload the 12 default synthetic test samples (including clean passes, underfilled tubes, tube color discrepancies, and ID barcode mix-ups) and recompute dashboard analytics. Any custom samples entered in this session will be overwritten.
+      </p>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button data-close-modal="modalResetConfirm" class="text-xs px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition font-semibold">
+          Cancel
+        </button>
+        <button id="btnConfirmResetDemo" class="text-xs px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold transition">
+          Yes, Reset Demo Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: REGULATORY & CLINICAL DISCLAIMER                        -->
+  <!-- ============================================================== -->
+  <div id="modalDisclaimer" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⚖️</span>
+          <h3 class="text-base font-bold text-slate-900">Clinical Scope, Ethics &amp; Educational Disclaimer</h3>
+        </div>
+        <button data-close-modal="modalDisclaimer" class="text-slate-400 hover:text-slate-700 text-lg font-bold p-1">✕</button>
+      </div>
+
+      <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+        <p class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 font-semibold">
+          IMPORTANT: This application is an educational prototype utilizing purely synthetic demonstration data. It is engineered to demonstrate the architectural feasibility of pre-analytical laboratory automation and optical verification.
+        </p>
+        <p>
+          <strong>No Clinical Diagnosis:</strong> This software does not provide medical diagnoses, treatment recommendations, or clinical certifications that a blood sample or biological specimen is viable or safe for diagnostic reporting.
+        </p>
+        <p>
+          <strong>Professional Judgment Remains Paramount:</strong> All specimen accept/reject actions in real-world clinical pathology laboratories must adhere to CLSI, CAP, and CLIA requirements and be signed off by licensed laboratory technologists and medical directors.
+        </p>
+        <p>
+          <strong>Zero Patient Privacy Risk:</strong> All names, MRNs, dates of birth, and barcodes rendered in this prototype are fictitious and synthetically generated. No Protected Health Information (PHI) is processed or transmitted.
+        </p>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 text-right">
+        <button data-close-modal="modalDisclaimer" class="text-xs px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg transition">
+          I Understand &amp; Acknowledge
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER                                   -->
+  <!-- ============================================================== -->
+  <div id="appToast" class="hidden">
+    <span id="toastIcon" class="text-base">ℹ️</span>
+    <span id="toastMessage" class="text-xs font-semibold">Notification</span>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT MODULE SCRIPTS                                      -->
+  <!-- ============================================================== -->
+  <script src="js/rules.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ocr.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/labelStudio.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+
