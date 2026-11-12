@@ -1,389 +1,483 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LabSentry AI - Project Description & Hackathon Submission Summary</title>
-  
-  <!-- Tailwind CSS CDN for utility grid and layout -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabSentry AI - Project Description & Hackathon Submission Summary</title>
 
-    :root {
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-    }
+    <!-- Tailwind CSS CDN for utility grid and layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
-    body {
-      font-family: var(--font-sans);
-      color: #0f172a;
-      background-color: #f1f5f9;
-      line-height: 1.35;
-      font-size: 0.8125rem;
-    }
+        :root {
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+        }
 
-    .font-mono {
-      font-family: var(--font-mono);
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    .summary-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.45rem;
-      padding: 0.5rem 0.7rem;
-      box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
-    }
+        body {
+            font-family: var(--font-sans);
+            color: #0f172a;
+            background-color: #f1f5f9;
+            line-height: 1.35;
+            font-size: 0.8125rem;
+        }
 
-    .badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
-      padding: 0.1rem 0.45rem;
-      border-radius: 9999px;
-      font-size: 0.65rem;
-      font-weight: 700;
-    }
+        .font-mono {
+            font-family: var(--font-mono);
+        }
 
-    /* Screen view container */
-    .page-container {
-      max-width: 960px;
-      margin: 0 auto;
-      background: #ffffff;
-    }
+        .summary-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.45rem;
+            padding: 0.5rem 0.7rem;
+            box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+        }
 
-    /* ============================================================== */
-    /* EXACT A4 PORTRAIT SINGLE-PAGE PRINT RULES                      */
-    /* ============================================================== */
-    @page {
-      size: A4 portrait;
-      margin: 6mm 7mm 6mm 7mm;
-    }
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
 
-    @media print {
-      html, body {
-        width: 100% !important;
-        height: 100% !important;
-        max-height: 297mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background-color: #ffffff !important;
-        color: #0f172a !important;
-        font-size: 7.3pt !important;
-        line-height: 1.25 !important;
-        overflow: hidden !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
+        /* Screen view container */
+        .page-container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+        }
 
-      .no-print {
-        display: none !important;
-      }
+        /* ============================================================== */
+        /* EXACT A4 PORTRAIT SINGLE-PAGE PRINT RULES                      */
+        /* ============================================================== */
+        @page {
+            size: A4 portrait;
+            margin: 6mm 7mm 6mm 7mm;
+        }
 
-      .page-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        max-height: 284mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        overflow: hidden !important;
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
-        break-inside: avoid !important;
-        break-after: avoid !important;
-      }
+        @media print {
 
-      .summary-card {
-        padding: 0.35rem 0.5rem !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 0.35rem !important;
-        box-shadow: none !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
+            html,
+            body {
+                width: 100% !important;
+                height: 100% !important;
+                max-height: 297mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background-color: #ffffff !important;
+                color: #0f172a !important;
+                font-size: 7.3pt !important;
+                line-height: 1.25 !important;
+                overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
 
-      /* Legible, compact typography hierarchy for single-page print */
-      h1 { font-size: 13pt !important; line-height: 1.15 !important; }
-      h2 { font-size: 8.2pt !important; line-height: 1.2 !important; }
-      h3 { font-size: 7.6pt !important; line-height: 1.2 !important; }
-      p, li, span, strong { font-size: 7.1pt !important; line-height: 1.25 !important; }
-      .text-2xs { font-size: 6.3pt !important; }
-      .text-3xs { font-size: 5.9pt !important; }
+            .no-print {
+                display: none !important;
+            }
 
-      /* Spacing adjustments for print */
-      .print-gap-compact { gap: 0.35rem !important; }
-      .print-space-compact > * + * { margin-top: 0.32rem !important; }
-      .print-p-compact { padding: 0.32rem 0.48rem !important; }
+            .page-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: 284mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                overflow: hidden !important;
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+                break-inside: avoid !important;
+                break-after: avoid !important;
+            }
 
-      a {
-        text-decoration: none !important;
-        color: inherit !important;
-      }
-    }
-  </style>
+            .summary-card {
+                padding: 0.35rem 0.5rem !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 0.35rem !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* Legible, compact typography hierarchy for single-page print */
+            h1 {
+                font-size: 13pt !important;
+                line-height: 1.15 !important;
+            }
+
+            h2 {
+                font-size: 8.2pt !important;
+                line-height: 1.2 !important;
+            }
+
+            h3 {
+                font-size: 7.6pt !important;
+                line-height: 1.2 !important;
+            }
+
+            p,
+            li,
+            span,
+            strong {
+                font-size: 7.1pt !important;
+                line-height: 1.25 !important;
+            }
+
+            .text-2xs {
+                font-size: 6.3pt !important;
+            }
+
+            .text-3xs {
+                font-size: 5.9pt !important;
+            }
+
+            /* Spacing adjustments for print */
+            .print-gap-compact {
+                gap: 0.35rem !important;
+            }
+
+            .print-space-compact>*+* {
+                margin-top: 0.32rem !important;
+            }
+
+            .print-p-compact {
+                padding: 0.32rem 0.48rem !important;
+            }
+
+            a {
+                text-decoration: none !important;
+                color: inherit !important;
+            }
+        }
+    </style>
 </head>
+
 <body class="p-3 sm:p-5 md:p-6 antialiased">
 
-  <!-- Top Action Navigation Bar (Hidden during Print) -->
-  <aside class="max-w-[960px] mx-auto mb-3 flex items-center justify-between no-print text-xs">
-    <a href="../index.html" class="inline-flex items-center gap-1.5 font-bold text-sky-700 hover:text-sky-900 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-2xs transition">
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-      <span>Launch LabSentry AI Web Application</span>
-    </a>
-    <div class="flex items-center gap-2">
-      <span class="text-3xs text-slate-500 hidden sm:inline">Optimized for 1-Page A4 PDF</span>
-      <button onclick="window.print()" class="inline-flex items-center gap-1.5 font-bold text-white bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 rounded-lg shadow-xs transition">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-        <span>Print to Single-Page PDF (A4)</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- Document Page Container -->
-  <main class="page-container border border-slate-200 rounded-xl shadow-sm p-4 sm:p-5 space-y-2 print-space-compact">
-
-    <!-- ============================================================== -->
-    <!-- 1. HEADER & METADATA                                           -->
-    <!-- ============================================================== -->
-    <header class="border-b border-slate-200 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-      <div>
+    <!-- Top Action Navigation Bar (Hidden during Print) -->
+    <aside class="max-w-[960px] mx-auto mb-3 flex items-center justify-between no-print text-xs">
+        <a href="../index.html"
+            class="inline-flex items-center gap-1.5 font-bold text-sky-700 hover:text-sky-900 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-2xs transition">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Launch LabSentry AI Web Application</span>
+        </a>
         <div class="flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-gradient-to-tr from-sky-600 to-teal-500 flex items-center justify-center text-white font-black text-xs shadow-xs">LS</span>
-          <h1 class="text-lg sm:text-xl font-black tracking-tight text-slate-900">LabSentry AI</h1>
-          <span class="badge-pill bg-sky-100 text-sky-800 border border-sky-300 font-mono">HACKATHON SUBMISSION</span>
-          <span class="badge-pill bg-slate-100 text-slate-700 border border-slate-300 font-mono">EDUCATIONAL PROTOTYPE</span>
+            <span class="text-3xs text-slate-500 hidden sm:inline">Optimized for 1-Page A4 PDF</span>
+            <button onclick="window.print()"
+                class="inline-flex items-center gap-1.5 font-bold text-white bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 rounded-lg shadow-xs transition">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                <span>Print to Single-Page PDF (A4)</span>
+            </button>
         </div>
-        <p class="text-xs font-semibold text-slate-600 mt-0.5">
-          AI-Assisted Laboratory Specimen Pre-Check &amp; Pre-Analytical Quality Dashboard Prototype
-        </p>
-      </div>
-      <div class="text-3xs sm:text-right font-medium text-slate-500 space-y-0.5 whitespace-nowrap">
-        <div><strong class="text-slate-700">Architecture:</strong> Client-Side Edge Execution &bull; 100% In-Browser</div>
-        <div><strong class="text-slate-700">Workflow:</strong> Pre-Analytical Verification &bull; Synthetic Demo Ledger</div>
-      </div>
-    </header>
+    </aside>
 
-    <!-- ============================================================== -->
-    <!-- 2. MANDATORY EDUCATIONAL & SYNTHETIC DISCLAIMER                -->
-    <!-- ============================================================== -->
-    <div class="p-1.5 px-2.5 bg-amber-50 rounded-md border border-amber-300 text-slate-900 text-3xs flex items-center gap-2">
-      <span class="text-amber-600 font-black text-xs flex-shrink-0">⚠️</span>
-      <p class="leading-tight">
-        <strong>Mandatory Educational Prototype Disclaimer:</strong> LabSentry AI is an educational simulation prototype operating entirely on synthetic demo records. It is designed for workflow exploration and <strong>does not diagnose patients, perform medical decision-making, or claim to prove that a specimen is clinically safe</strong>. The system does not claim formal regulatory certification. Final specimen acceptance or redraw decisions remain solely with qualified laboratory professionals.
-      </p>
-    </div>
+    <!-- Document Page Container -->
+    <main class="page-container border border-slate-200 rounded-xl shadow-sm p-4 sm:p-5 space-y-2 print-space-compact">
 
-    <!-- ============================================================== -->
-    <!-- 3. PROBLEM STATEMENT & PROPOSED SOLUTION GRID                  -->
-    <!-- ============================================================== -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 gap-2 print-gap-compact">
-      <!-- Problem Statement -->
-      <div class="summary-card border-l-4 border-l-rose-500">
-        <div class="flex items-center gap-1.5 mb-0.5">
-          <span class="text-rose-600 font-bold text-3xs uppercase tracking-wider">The Clinical Context</span>
-        </div>
-        <h2 class="text-xs font-bold text-slate-900 mb-0.5">Pre-Analytical Errors Lead to Sample Rejections and Delays</h2>
-        <p class="text-3xs text-slate-600 leading-snug text-justify">
-          In clinical pathology, published literature highlights that pre-analytical steps (sample collection, labeling, tube selection, and handling) represent a major source of laboratory discrepancies and sample rejections before specimens reach automated analyzers. Typical workflow problems include collecting blood into incompatible additive tubes (e.g., EDTA instead of Citrate for coagulation assays), mismatched accession IDs between requisitions and vials, and underfilled tubes. In particular, underfilled Sodium Citrate tubes disrupt the necessary 9:1 blood-to-anticoagulant ratio, resulting in excess free citrate that can alter coagulation assay timings and necessitate specimen redraws.
-        </p>
-      </div>
+        <!-- ============================================================== -->
+        <!-- 1. HEADER & METADATA                                           -->
+        <!-- ============================================================== -->
+        <header class="border-b border-slate-200 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span
+                        class="w-7 h-7 rounded-lg bg-gradient-to-tr from-sky-600 to-teal-500 flex items-center justify-center text-white font-black text-xs shadow-xs">LS</span>
+                    <h1 class="text-lg sm:text-xl font-black tracking-tight text-slate-900">LabSentry AI</h1>
+                    <span class="badge-pill bg-sky-100 text-sky-800 border border-sky-300 font-mono">HACKATHON
+                        SUBMISSION</span>
+                    <span class="badge-pill bg-slate-100 text-slate-700 border border-slate-300 font-mono">EDUCATIONAL
+                        PROTOTYPE</span>
+                </div>
+                <p class="text-xs font-semibold text-slate-600 mt-0.5">
+                    AI-Assisted Laboratory Specimen Pre-Check &amp; Pre-Analytical Quality Dashboard Prototype
+                </p>
+            </div>
+            <div class="text-3xs sm:text-right font-medium text-slate-500 space-y-0.5 whitespace-nowrap">
+                <div><strong class="text-slate-700">Architecture:</strong> Client-Side Edge Execution &bull; 100%
+                    In-Browser</div>
+                <div><strong class="text-slate-700">Workflow:</strong> Pre-Analytical Verification &bull; Synthetic Demo
+                    Ledger</div>
+            </div>
+        </header>
 
-      <!-- Proposed Solution -->
-      <div class="summary-card border-l-4 border-l-teal-500">
-        <div class="flex items-center gap-1.5 mb-0.5">
-          <span class="text-teal-600 font-bold text-3xs uppercase tracking-wider">The Proposed Solution</span>
+        <!-- ============================================================== -->
+        <!-- 2. MANDATORY EDUCATIONAL & SYNTHETIC DISCLAIMER                -->
+        <!-- ============================================================== -->
+        <div
+            class="p-1.5 px-2.5 bg-amber-50 rounded-md border border-amber-300 text-slate-900 text-3xs flex items-center gap-2">
+            <span class="text-amber-600 font-black text-xs flex-shrink-0">⚠️</span>
+            <p class="leading-tight">
+                <strong>Mandatory Educational Prototype Disclaimer:</strong> LabSentry AI is an educational simulation
+                prototype operating entirely on synthetic demo records. It is designed for workflow exploration and
+                <strong>does not diagnose patients, perform medical decision-making, or claim to prove that a specimen
+                    is clinically safe</strong>. The system does not claim formal regulatory certification. Final
+                specimen acceptance or redraw decisions remain solely with qualified laboratory professionals.
+            </p>
         </div>
-        <h2 class="text-xs font-bold text-slate-900 mb-0.5">Automated Optical Scanning &amp; Rule-Based Pre-Check Triage</h2>
-        <p class="text-3xs text-slate-600 leading-snug text-justify">
-          <strong>LabSentry AI</strong> provides an interactive laboratory sample pre-check dashboard prototype. Running fully in the browser, the system combines client-side optical character recognition (OCR via Tesseract.js), image contrast pre-processing, deterministic clinical rule verification, and a human-in-the-loop review interface. The prototype cross-checks requisition IDs, sample IDs, tube additive types, and sample volume percentages in seconds, outputting transparent triage indicators—<em>No Mismatch Found</em>, <em>Review Required</em>, or <em>Mismatch Detected</em>—along with educational rationales for laboratory staff inspection.
-        </p>
-      </div>
-    </section>
 
-    <!-- ============================================================== -->
-    <!-- 4. SYSTEM WORKFLOW ARCHITECTURE (HORIZONTAL PIPELINE)          -->
-    <!-- ============================================================== -->
-    <section class="summary-card print-p-compact">
-      <div class="flex items-center justify-between mb-1">
-        <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500">System Workflow Architecture</h2>
-        <span class="text-3xs font-mono text-slate-400">Sequential Ingestion &amp; Verification Pipeline</span>
-      </div>
-      <div class="grid grid-cols-6 gap-1 text-center">
-        <div class="p-1 rounded bg-slate-50 border border-slate-200">
-          <span class="block font-bold text-sky-700 text-3xs">1. Ingest</span>
-          <span class="text-slate-500 text-3xs block leading-tight">Order entry / label upload</span>
-        </div>
-        <div class="p-1 rounded bg-slate-50 border border-slate-200">
-          <span class="block font-bold text-sky-700 text-3xs">2. Vision &amp; OCR</span>
-          <span class="text-slate-500 text-3xs block leading-tight">Canvas boost + Tesseract</span>
-        </div>
-        <div class="p-1 rounded bg-slate-50 border border-slate-200">
-          <span class="block font-bold text-sky-700 text-3xs">3. Review</span>
-          <span class="text-slate-500 text-3xs block leading-tight">Technician verification</span>
-        </div>
-        <div class="p-1 rounded bg-slate-50 border border-slate-200">
-          <span class="block font-bold text-sky-700 text-3xs">4. Rules</span>
-          <span class="text-slate-500 text-3xs block leading-tight">Tube &amp; volume checks</span>
-        </div>
-        <div class="p-1 rounded bg-slate-50 border border-slate-200">
-          <span class="block font-bold text-sky-700 text-3xs">5. Triage</span>
-          <span class="text-slate-500 text-3xs block leading-tight">Pass / Review / Alert</span>
-        </div>
-        <div class="p-1 rounded bg-slate-50 border border-slate-200">
-          <span class="block font-bold text-sky-700 text-3xs">6. Ledger</span>
-          <span class="text-slate-500 text-3xs block leading-tight">Audit log &amp; CSV export</span>
-        </div>
-      </div>
-    </section>
+        <!-- ============================================================== -->
+        <!-- 3. PROBLEM STATEMENT & PROPOSED SOLUTION GRID                  -->
+        <!-- ============================================================== -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 gap-2 print-gap-compact">
+            <!-- Problem Statement -->
+            <div class="summary-card border-l-4 border-l-rose-500">
+                <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="text-rose-600 font-bold text-3xs uppercase tracking-wider">The Clinical Context</span>
+                </div>
+                <h2 class="text-xs font-bold text-slate-900 mb-0.5">Pre-Analytical Errors Lead to Sample Rejections and
+                    Delays</h2>
+                <p class="text-3xs text-slate-600 leading-snug text-justify">
+                    In clinical pathology, published literature highlights that pre-analytical steps (sample collection,
+                    labeling, tube selection, and handling) represent a major source of laboratory discrepancies and
+                    sample rejections before specimens reach automated analyzers. Typical workflow problems include
+                    collecting blood into incompatible additive tubes (e.g., EDTA instead of Citrate for coagulation
+                    assays), mismatched accession IDs between requisitions and vials, and underfilled tubes. In
+                    particular, underfilled Sodium Citrate tubes disrupt the necessary 9:1 blood-to-anticoagulant ratio,
+                    resulting in excess free citrate that can alter coagulation assay timings and necessitate specimen
+                    redraws.
+                </p>
+            </div>
 
-    <!-- ============================================================== -->
-    <!-- 5. IMPLEMENTED FEATURES MATRIX (10 OPERATIONAL MODULES)        -->
-    <!-- ============================================================== -->
-    <section class="summary-card print-p-compact">
-      <div class="flex items-center justify-between mb-1">
-        <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500">Core Implemented Features (All 10 Modules Functional)</h2>
-        <span class="text-3xs text-sky-700 font-bold bg-sky-50 px-1.5 py-0.2 rounded border border-sky-200">Full Prototype Scope</span>
-      </div>
+            <!-- Proposed Solution -->
+            <div class="summary-card border-l-4 border-l-teal-500">
+                <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="text-teal-600 font-bold text-3xs uppercase tracking-wider">The Proposed Solution</span>
+                </div>
+                <h2 class="text-xs font-bold text-slate-900 mb-0.5">Automated Optical Scanning &amp; Rule-Based
+                    Pre-Check Triage</h2>
+                <p class="text-3xs text-slate-600 leading-snug text-justify">
+                    <strong>LabSentry AI</strong> provides an interactive laboratory sample pre-check dashboard
+                    prototype. Running fully in the browser, the system combines client-side optical character
+                    recognition (OCR via Tesseract.js), image contrast pre-processing, deterministic clinical rule
+                    verification, and a human-in-the-loop review interface. The prototype cross-checks requisition IDs,
+                    sample IDs, tube additive types, and sample volume percentages in seconds, outputting transparent
+                    triage indicators—<em>No Mismatch Found</em>, <em>Review Required</em>, or <em>Mismatch
+                        Detected</em>—along with educational rationales for laboratory staff inspection.
+                </p>
+            </div>
+        </section>
 
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-3xs">
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">1. Statistics Dashboard</strong>
-          <span class="text-slate-600 block leading-tight">Summary KPI cards: total sample checks, pass %, review %, discrepancy %, and volume compliance.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">2. Clinical Intake Form</strong>
-          <span class="text-slate-600 block leading-tight">Order ID, Sample ID, Test Name, Expected Tube, Collected Tube, and 0–100% volume slider with vial visual.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">3. Browser OCR Engine</strong>
-          <span class="text-slate-600 block leading-tight">Tesseract.js client OCR with canvas contrast stretching, grayscale binarization, and regex parsing.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">4. Review &amp; Edit Drawer</strong>
-          <span class="text-slate-600 block leading-tight">Side-by-side editing panel allowing technicians to correct misread fields before final validation.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">5. Configured Rules Engine</strong>
-          <span class="text-slate-600 block leading-tight">Checks tube additive compatibility, accession matches, and tube-specific volume rules (e.g. 90% Citrate).</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">6. Clear Result Displays</strong>
-          <span class="text-slate-600 block leading-tight">Prominent outcome banners: <span class="text-emerald-700 font-bold">No Mismatch</span>, <span class="text-amber-700 font-bold">Review Required</span>, or <span class="text-rose-700 font-bold">Mismatch Detected</span>.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">7. Clear Reason for Every Result</strong>
-          <span class="text-slate-600 block leading-tight">Categorized checklist with PASS/WARN/FAIL indicators and explanatory clinical rationales for every check.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">8. Sample History &amp; Filters</strong>
-          <span class="text-slate-600 block leading-tight">Searchable demo ledger with status and test filters, printable inspection slips, and CSV / JSON export.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">9. Chart.js Analytics</strong>
-          <span class="text-slate-600 block leading-tight">Four live charts: Outcome Doughnut, Discrepancy Causes Bar, Dept Throughput, and Tube Color Mix.</span>
-        </div>
-        <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
-          <strong class="text-slate-900 block font-bold">10. Reset Demo Data &amp; Studio</strong>
-          <span class="text-slate-600 block leading-tight">One-click reset to 12 synthetic demo cases plus Canvas barcode generator with 6 realistic test presets.</span>
-        </div>
-      </div>
-    </section>
+        <!-- ============================================================== -->
+        <!-- 4. SYSTEM WORKFLOW ARCHITECTURE (HORIZONTAL PIPELINE)          -->
+        <!-- ============================================================== -->
+        <section class="summary-card print-p-compact">
+            <div class="flex items-center justify-between mb-1">
+                <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500">System Workflow Architecture</h2>
+                <span class="text-3xs font-mono text-slate-400">Sequential Ingestion &amp; Verification Pipeline</span>
+            </div>
+            <div class="grid grid-cols-6 gap-1 text-center">
+                <div class="p-1 rounded bg-slate-50 border border-slate-200">
+                    <span class="block font-bold text-sky-700 text-3xs">1. Ingest</span>
+                    <span class="text-slate-500 text-3xs block leading-tight">Order entry / label upload</span>
+                </div>
+                <div class="p-1 rounded bg-slate-50 border border-slate-200">
+                    <span class="block font-bold text-sky-700 text-3xs">2. Vision &amp; OCR</span>
+                    <span class="text-slate-500 text-3xs block leading-tight">Canvas boost + Tesseract</span>
+                </div>
+                <div class="p-1 rounded bg-slate-50 border border-slate-200">
+                    <span class="block font-bold text-sky-700 text-3xs">3. Review</span>
+                    <span class="text-slate-500 text-3xs block leading-tight">Technician verification</span>
+                </div>
+                <div class="p-1 rounded bg-slate-50 border border-slate-200">
+                    <span class="block font-bold text-sky-700 text-3xs">4. Rules</span>
+                    <span class="text-slate-500 text-3xs block leading-tight">Tube &amp; volume checks</span>
+                </div>
+                <div class="p-1 rounded bg-slate-50 border border-slate-200">
+                    <span class="block font-bold text-sky-700 text-3xs">5. Triage</span>
+                    <span class="text-slate-500 text-3xs block leading-tight">Pass / Review / Alert</span>
+                </div>
+                <div class="p-1 rounded bg-slate-50 border border-slate-200">
+                    <span class="block font-bold text-sky-700 text-3xs">6. Ledger</span>
+                    <span class="text-slate-500 text-3xs block leading-tight">Audit log &amp; CSV export</span>
+                </div>
+            </div>
+        </section>
 
-    <!-- ============================================================== -->
-    <!-- 6. TECH STACK, INNOVATION, & FUTURE SCOPE                      -->
-    <!-- ============================================================== -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 print-gap-compact">
-      
-      <!-- Tech Stack Card -->
-      <div class="summary-card">
-        <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Technology Stack</h2>
-        <ul class="text-3xs space-y-0.5 text-slate-700">
-          <li class="flex items-center justify-between">
-            <span><strong>Markup &amp; Styling:</strong> HTML5, CSS3</span>
-            <span class="text-3xs font-mono bg-slate-100 px-1 rounded">Tailwind</span>
-          </li>
-          <li class="flex items-center justify-between">
-            <span><strong>Runtime Logic:</strong> Vanilla JavaScript</span>
-            <span class="text-3xs font-mono bg-slate-100 px-1 rounded">ES6+ Modules</span>
-          </li>
-          <li class="flex items-center justify-between">
-            <span><strong>Client-Side OCR:</strong> Tesseract.js</span>
-            <span class="text-3xs font-mono bg-slate-100 px-1 rounded">v5.0 CDN</span>
-          </li>
-          <li class="flex items-center justify-between">
-            <span><strong>Analytics Charts:</strong> Chart.js</span>
-            <span class="text-3xs font-mono bg-slate-100 px-1 rounded">v4.4 CDN</span>
-          </li>
-          <li class="flex items-center justify-between">
-            <span><strong>Data Persistence:</strong> Web Storage API</span>
-            <span class="text-3xs font-mono bg-slate-100 px-1 rounded">LocalStorage</span>
-          </li>
-          <li class="flex items-center justify-between">
-            <span><strong>Image Synthesis:</strong> HTML5 Canvas</span>
-            <span class="text-3xs font-mono bg-slate-100 px-1 rounded">2D Context</span>
-          </li>
-        </ul>
-      </div>
+        <!-- ============================================================== -->
+        <!-- 5. IMPLEMENTED FEATURES MATRIX (10 OPERATIONAL MODULES)        -->
+        <!-- ============================================================== -->
+        <section class="summary-card print-p-compact">
+            <div class="flex items-center justify-between mb-1">
+                <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500">Core Implemented Features (All 10
+                    Modules Functional)</h2>
+                <span class="text-3xs text-sky-700 font-bold bg-sky-50 px-1.5 py-0.2 rounded border border-sky-200">Full
+                    Prototype Scope</span>
+            </div>
 
-      <!-- Key Innovations Card -->
-      <div class="summary-card">
-        <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Prototype Innovations</h2>
-        <ul class="text-3xs space-y-0.5 text-slate-600">
-          <li>
-            <strong class="text-slate-800">Privacy-First Edge Architecture:</strong> All image parsing, OCR, and rules run strictly inside the user's browser without sending demo label images to external cloud endpoints.
-          </li>
-          <li>
-            <strong class="text-slate-800">Explainable Rationale Engine:</strong> Avoids opaque outputs by pairing every validation result with an explicit, educational rationale regarding additive compatibility and fill ratios.
-          </li>
-          <li>
-            <strong class="text-slate-800">Interactive Synthetic Test Studio:</strong> Built-in 2D Canvas barcode label generator with 6 curated scenarios for repeatable demonstration without external image dependencies.
-          </li>
-        </ul>
-      </div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-3xs">
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">1. Statistics Dashboard</strong>
+                    <span class="text-slate-600 block leading-tight">Summary KPI cards: total sample checks, pass %,
+                        review %, discrepancy %, and volume compliance.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">2. Clinical Intake Form</strong>
+                    <span class="text-slate-600 block leading-tight">Order ID, Sample ID, Test Name, Expected Tube,
+                        Collected Tube, and 0–100% volume slider with vial visual.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">3. Browser OCR Engine</strong>
+                    <span class="text-slate-600 block leading-tight">Tesseract.js client OCR with canvas contrast
+                        stretching, grayscale binarization, and regex parsing.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">4. Review &amp; Edit Drawer</strong>
+                    <span class="text-slate-600 block leading-tight">Side-by-side editing panel allowing technicians to
+                        correct misread fields before final validation.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">5. Configured Rules Engine</strong>
+                    <span class="text-slate-600 block leading-tight">Checks tube additive compatibility, accession
+                        matches, and tube-specific volume rules (e.g. 90% Citrate).</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">6. Clear Result Displays</strong>
+                    <span class="text-slate-600 block leading-tight">Prominent outcome banners: <span
+                            class="text-emerald-700 font-bold">No Mismatch</span>, <span
+                            class="text-amber-700 font-bold">Review Required</span>, or <span
+                            class="text-rose-700 font-bold">Mismatch Detected</span>.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">7. Clear Reason for Every Result</strong>
+                    <span class="text-slate-600 block leading-tight">Categorized checklist with PASS/WARN/FAIL
+                        indicators and explanatory clinical rationales for every check.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">8. Sample History &amp; Filters</strong>
+                    <span class="text-slate-600 block leading-tight">Searchable demo ledger with status and test
+                        filters, printable inspection slips, and CSV / JSON export.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">9. Chart.js Analytics</strong>
+                    <span class="text-slate-600 block leading-tight">Four live charts: Outcome Doughnut, Discrepancy
+                        Causes Bar, Dept Throughput, and Tube Color Mix.</span>
+                </div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-200">
+                    <strong class="text-slate-900 block font-bold">10. Reset Demo Data &amp; Studio</strong>
+                    <span class="text-slate-600 block leading-tight">One-click reset to 12 synthetic demo cases plus
+                        Canvas barcode generator with 6 realistic test presets.</span>
+                </div>
+            </div>
+        </section>
 
-      <!-- Limitations & Future Scope Card -->
-      <div class="summary-card">
-        <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Limitations &amp; Future Scope</h2>
-        <div class="text-3xs text-slate-600 space-y-0.5">
-          <p>
-            <strong class="text-slate-800">Current Limitations:</strong> Evaluates simulated 2D label images and manual volume inputs; cannot measure physical clot presence or serum hemolysis, icterus, or lipemia (HIL indices).
-          </p>
-          <p>
-            <strong class="text-slate-800">Future Roadmap:</strong>
-          </p>
-          <ul class="list-disc list-inside text-3xs text-slate-500 space-y-0.2">
-            <li>Live WebRTC camera streaming for continuous barcode capture</li>
-            <li>Computer vision liquid meniscus detection (TensorFlow.js)</li>
-            <li>Integration with hospital LIMS standards (HL7 / FHIR)</li>
-          </ul>
+        <!-- ============================================================== -->
+        <!-- 6. TECH STACK, INNOVATION, & FUTURE SCOPE                      -->
+        <!-- ============================================================== -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 print-gap-compact">
+
+            <!-- Tech Stack Card -->
+            <div class="summary-card">
+                <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Technology Stack</h2>
+                <ul class="text-3xs space-y-0.5 text-slate-700">
+                    <li class="flex items-center justify-between">
+                        <span><strong>Markup &amp; Styling:</strong> HTML5, CSS3</span>
+                        <span class="text-3xs font-mono bg-slate-100 px-1 rounded">Tailwind</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span><strong>Runtime Logic:</strong> Vanilla JavaScript</span>
+                        <span class="text-3xs font-mono bg-slate-100 px-1 rounded">ES6+ Modules</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span><strong>Client-Side OCR:</strong> Tesseract.js</span>
+                        <span class="text-3xs font-mono bg-slate-100 px-1 rounded">v5.0 CDN</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span><strong>Analytics Charts:</strong> Chart.js</span>
+                        <span class="text-3xs font-mono bg-slate-100 px-1 rounded">v4.4 CDN</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span><strong>Data Persistence:</strong> Web Storage API</span>
+                        <span class="text-3xs font-mono bg-slate-100 px-1 rounded">LocalStorage</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span><strong>Image Synthesis:</strong> HTML5 Canvas</span>
+                        <span class="text-3xs font-mono bg-slate-100 px-1 rounded">2D Context</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Key Innovations Card -->
+            <div class="summary-card">
+                <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Prototype Innovations</h2>
+                <ul class="text-3xs space-y-0.5 text-slate-600">
+                    <li>
+                        <strong class="text-slate-800">Privacy-First Edge Architecture:</strong> All image parsing, OCR,
+                        and rules run strictly inside the user's browser without sending demo label images to external
+                        cloud endpoints.
+                    </li>
+                    <li>
+                        <strong class="text-slate-800">Explainable Rationale Engine:</strong> Avoids opaque outputs by
+                        pairing every validation result with an explicit, educational rationale regarding additive
+                        compatibility and fill ratios.
+                    </li>
+                    <li>
+                        <strong class="text-slate-800">Interactive Synthetic Test Studio:</strong> Built-in 2D Canvas
+                        barcode label generator with 6 curated scenarios for repeatable demonstration without external
+                        image dependencies.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Limitations & Future Scope Card -->
+            <div class="summary-card">
+                <h2 class="text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Limitations &amp; Future
+                    Scope</h2>
+                <div class="text-3xs text-slate-600 space-y-0.5">
+                    <p>
+                        <strong class="text-slate-800">Current Limitations:</strong> Evaluates simulated 2D label images
+                        and manual volume inputs; cannot measure physical clot presence or serum hemolysis, icterus, or
+                        lipemia (HIL indices).
+                    </p>
+                    <p>
+                        <strong class="text-slate-800">Future Roadmap:</strong>
+                    </p>
+                    <ul class="list-disc list-inside text-3xs text-slate-500 space-y-0.2">
+                        <li>Live WebRTC camera streaming for continuous barcode capture</li>
+                        <li>Computer vision liquid meniscus detection (TensorFlow.js)</li>
+                        <li>Integration with hospital LIMS standards (HL7 / FHIR)</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
-      </div>
 
-    </div>
+        <!-- ============================================================== -->
+        <!-- 7. SUBMISSION METADATA & FOOTER                                -->
+        <!-- ============================================================== -->
+        <footer
+            class="pt-1.5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-1 text-3xs text-slate-500">
+            <div class="flex items-center gap-1.5">
+                <strong class="text-slate-700">LabSentry AI</strong> &bull; Educational Prototype Demonstration &bull;
+                Hackathon Submission
+            </div>
+            <div class="font-mono text-3xs text-slate-400">
+                Vanilla JS &bull; Tesseract.js &bull; Chart.js &bull; Single-Page A4 Layout
+            </div>
+        </footer>
 
-    <!-- ============================================================== -->
-    <!-- 7. SUBMISSION METADATA & FOOTER                                -->
-    <!-- ============================================================== -->
-    <footer class="pt-1.5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-1 text-3xs text-slate-500">
-      <div class="flex items-center gap-1.5">
-        <strong class="text-slate-700">LabSentry AI</strong> &bull; Educational Prototype Demonstration &bull; Hackathon Submission
-      </div>
-      <div class="font-mono text-3xs text-slate-400">
-        Vanilla JS &bull; Tesseract.js &bull; Chart.js &bull; Single-Page A4 Layout
-      </div>
-    </footer>
-
-  </main>
+    </main>
 
 </body>
+
 </html>
